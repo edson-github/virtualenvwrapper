@@ -45,7 +45,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'virtualenvwrapper'
-copyright = u'2009-%s, Doug Hellmann' % datetime.datetime.today().year
+copyright = f'2009-{datetime.datetime.now().year}, Doug Hellmann'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

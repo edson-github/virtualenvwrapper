@@ -95,9 +95,7 @@ def main():
 
     root_logger = logging.getLogger('virtualenvwrapper')
 
-    # Set up logging to a file
-    logfile = os.environ.get('VIRTUALENVWRAPPER_LOG_FILE')
-    if logfile:
+    if logfile := os.environ.get('VIRTUALENVWRAPPER_LOG_FILE'):
         root_logger.setLevel(logging.DEBUG)
         file_handler = GroupWriteRotatingFileHandler(
             logfile,
@@ -151,7 +149,7 @@ def main():
             output.write('# %s\n' % hook)
             # output.write('echo %s\n' % hook)
             # output.write('set -x\n')
-            run_hooks(hook + '_source', options, args, output)
+            run_hooks(f'{hook}_source', options, args, output)
         finally:
             output.close()
 
@@ -163,12 +161,12 @@ def run_hooks(hook, options, args, output=None):
     if output is None:
         output = sys.stdout
 
-    namespace = 'virtualenvwrapper.%s' % hook
+    namespace = f'virtualenvwrapper.{hook}'
     if options.names:
-        log.debug('looking for %s hooks %s' % (namespace, options.names))
+        log.debug(f'looking for {namespace} hooks {options.names}')
         hook_mgr = NamedExtensionManager(namespace, options.names)
     else:
-        log.debug('looking for %s hooks' % namespace)
+        log.debug(f'looking for {namespace} hooks')
         hook_mgr = ExtensionManager(namespace)
 
     if options.listing:
@@ -184,12 +182,13 @@ def run_hooks(hook, options, args, output=None):
         def get_source(ext, args):
             # Show the shell commands so they can
             # be run in the calling shell.
-            log.debug('getting source instructions for %s' % ext.name)
+            log.debug(f'getting source instructions for {ext.name}')
             contents = (ext.plugin(args) or '').strip()
             if contents:
                 output.write('# %s\n' % ext.name)
                 output.write(contents)
                 output.write("\n")
+
         try:
             hook_mgr.map(get_source, args[1:])
         except RuntimeError:
@@ -198,8 +197,9 @@ def run_hooks(hook, options, args, output=None):
     else:
         # Just run the plugin ourselves
         def invoke(ext, args):
-            log.debug('running %s' % ext.name)
+            log.debug(f'running {ext.name}')
             ext.plugin(args)
+
         try:
             hook_mgr.map(invoke, args[1:])
         except RuntimeError:

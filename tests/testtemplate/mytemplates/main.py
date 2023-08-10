@@ -18,7 +18,7 @@ def template(args):
     print('Running test template with args %r' % args)
     project, project_dir = args
     filename = os.path.join(project_dir, 'TEST_FILE')
-    print('Writing to %s' % filename)
+    print(f'Writing to {filename}')
     output = open(filename, 'w')
     try:
         output.write('\n'.join(args))
