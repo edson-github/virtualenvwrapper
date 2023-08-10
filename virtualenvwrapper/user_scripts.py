@@ -29,10 +29,9 @@ else:
 def _get_msys_shell():
     if 'MSYS_HOME' in os.environ:
         return [get_path(os.environ['MSYS_HOME'], 'bin', 'sh.exe')]
-    else:
-        for path in os.environ['PATH'].split(';'):
-            if os.path.exists(os.path.join(path, 'sh.exe')):
-                return [get_path(path, 'sh.exe')]
+    for path in os.environ['PATH'].split(';'):
+        if os.path.exists(os.path.join(path, 'sh.exe')):
+            return [get_path(path, 'sh.exe')]
     raise Exception('Could not find sh.exe')
 
 
